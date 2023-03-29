@@ -3,9 +3,9 @@ import React from 'react'
 import { useState } from 'react';
 import { useEffect } from 'react';
 import './SidebarChat.css';
-// import db from '../firebase';
+import db from '../firebase';
 
-function SidebarChat({addNewChat}) {
+function SidebarChat({id, name, addNewChat}) {
     const [seed, setSeed] = useState("");
 
     useEffect(() => {
@@ -20,9 +20,9 @@ function SidebarChat({addNewChat}) {
 
         if(roomName){
             // do some database stuff
-            // db.collections("rooms").add({
-            //     name: roomName
-            // });
+            db.collections("rooms").add({
+                name: roomName,
+            });
         }
     };
 
@@ -30,7 +30,7 @@ function SidebarChat({addNewChat}) {
         <div className="Sidebar_Chat">
             <Avatar src={`https://avatars.dicebear.com/api/human/${seed}.svg`} />
             <div  className="SidebarChat_info">
-                <h2>Enter room name</h2>
+                <h2>{name}</h2>
                 <p>Last message...</p>
             </div>
         </div>

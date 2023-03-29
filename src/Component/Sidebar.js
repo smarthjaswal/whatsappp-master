@@ -10,20 +10,24 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import db from '../firebase';
 
-function Sidebar({id, name, addNewChat}) {
-   const [rooms, setRooms] = useState([]);
 
-   useEffect(()=>{
-    db.collection("rooms").onSnapshot((snapshot)=>
-    setRooms(
-        snapshot.docs.map((doc)=>({
-            id: doc.id,
-            data:doc.data(),
-        }))
-    )
-    
-    );
-   },[]);
+function Sidebar({ id, name, addNewChat }) {
+    const [rooms, setRooms] = useState([]);
+
+    useEffect(() => {
+        const unsubscribe = db.collection("rooms").onSnapshot((snapshot) =>
+            setRooms(
+                snapshot.docs.map((doc) => ({
+                    id: doc.id,
+                    data: doc.data(),
+                }))
+            )
+
+        );
+        return () =>{
+            unsubscribe();
+        }
+    }, []);
 
 
     return (
@@ -53,9 +57,9 @@ function Sidebar({id, name, addNewChat}) {
             </div>
             <div className="sidebar_chats">
                 <SidebarChat addNewChat />
-                {rooms.map(rooms=>{
-                    <SidebarChat key = {rooms.id} id = {rooms.id} name = {rooms.data.name}/>
-                })}
+                {rooms.map(room => (
+                    <SidebarChat key={room.id} id={room.id} name={room.data.name} />
+                ))}
 
 
             </div>
